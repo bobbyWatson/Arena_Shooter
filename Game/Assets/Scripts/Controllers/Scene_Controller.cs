@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Scene_Controller : MonoBehaviour {
+public class Scene_Controller : Controller {
 
 	private static Scene_Controller _instance;
 	public static Scene_Controller instance{

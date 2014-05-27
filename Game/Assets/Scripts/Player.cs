@@ -5,7 +5,11 @@ public class Player : MonoBehaviour {
 
 	public PlayerMove move;
 	public PlayerShoot shoot;
+	public AudioClip shootSound;
+	public AudioClip explodeSound;
+	public AudioClip colorChangeSound;
 	public GameObject body;
+	public Score score;
 	public CircleCollider2D collider;
 	public Animator meshAnimator;
 	public Animator canonAnimator;
@@ -15,6 +19,7 @@ public class Player : MonoBehaviour {
 	public SpriteRenderer target;
 	public ParticleSystem explosion;
 	public ParticleSystem douille;
+	public ParticleSystem feathers;
 	public bool keyboardControl = false;
 	public int lifes;
 	public Transform respawn;
@@ -34,11 +39,18 @@ public class Player : MonoBehaviour {
 	public Colors color;
 	public GamepadInput.GamePad.Index gamePadIndex;
 	public float invincibleTime;
+	private AudioSource audioSource;
 	private bool invincible;
+
+	public void Awake (){
+		audioSource = GetComponent<AudioSource>();
+	}
 
 	public void Die (){
 		if(!invincible){
 			explosion.Play();
+			audioSource.clip = explodeSound;
+			audioSource.Play();
 			move.enabled = false;
 			shoot.enabled = false;
 			rigidbody2D.Sleep();
@@ -47,8 +59,12 @@ public class Player : MonoBehaviour {
 			canonRenderer.enabled = false;
 			target.enabled = false;
 			lifes--;
-			if(lifes >= 0)
+			score.SetScore(lifes, color);
+			if(lifes > 0){
 				StartCoroutine(Respawn());
+			}else{
+				Game_Controller.instance.CheckLastAlive();
+			}
 		}
 	}
 
@@ -62,6 +78,7 @@ public class Player : MonoBehaviour {
 		canonRenderer.enabled = true;
 		target.enabled = true;
 		transform.position = respawn.position;
+		feathers.Play();
 		invincible = true;
 		StartCoroutine(Blink());
 		yield return new WaitForSeconds(invincibleTime);
@@ -88,5 +105,11 @@ public class Player : MonoBehaviour {
 		meshAnimator.runtimeAnimatorController = Game_Controller.instance.playerAnimatorDic[color];
 		canonAnimator.runtimeAnimatorController = Game_Controller.instance.playerCanonAnimatorDic[color];
 		target.sprite = Game_Controller.instance.playerTargetDic[color];
+	}
+
+	public void ShootSound (){
+		audioSource.clip = shootSound;
+		Debug.Log(audioSource.clip);
+		audioSource.Play();
 	}
 }

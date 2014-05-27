@@ -39,17 +39,19 @@ public class PlayerShoot : MonoBehaviour {
 	}
 
 	void Shoot (){
+		player.ShootSound();
 		player.douille.Play();
 		player.canonAnimator.SetTrigger(shooting);
 		Bullet bullet = Game_Controller.instance.bulletManager.UnPool();
 		bullet.transform.position = player.transform.position;
 		StartCoroutine(enableBullet(bullet));
 		bullet.originColor = player.color;
+		bullet.SetCurrentColor(Player.Colors.WHITE);
 		bullet.rigidbody2D.velocity = player.move.ShootVec * bulletSpeed;
 	}
 
 	IEnumerator enableBullet (Bullet bullet){
-		yield return new WaitForSeconds(0.1f);
+		yield return new WaitForSeconds(0.2f);
 		bullet.gameObject.layer = LayerMask.NameToLayer("Bullet");
 	}
 }

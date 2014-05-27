@@ -13,8 +13,10 @@ public class Bullet : MonoBehaviour {
 	public float lifeTime;
 	private bool inofensive;
 	private SpriteRenderer spriteRenderer;
+	private AudioSource audioSource;
 
 	void Awake (){
+		audioSource = GetComponent<AudioSource>();
 		colorSprite = Utils.CreateDictionnary(colorSpriteKeys, colorSpriteValues);
 		currentColor = Player.Colors.WHITE;
 		inofensive = true;
@@ -28,14 +30,18 @@ public class Bullet : MonoBehaviour {
 			}else if(coll.gameObject.GetComponent<Player>().color == currentColor){
 				coll.gameObject.GetComponent<Player>().Die();
 			}else{
+				audioSource.Play();
 				Player.Colors newColor = coll.gameObject.GetComponent<Player>().color;
-				currentColor = newColor;
-				spriteRenderer.sprite = colorSprite[newColor];
+				SetCurrentColor(newColor);
 			}
 		}else{
-			currentColor = originColor;
-			spriteRenderer.sprite = colorSprite[originColor];
+			SetCurrentColor(originColor);
 		}
+	}
+
+	public void SetCurrentColor (Player.Colors color){
+		currentColor = color;
+		spriteRenderer.sprite = colorSprite[color];
 	}
 
 	public void OnPool (){

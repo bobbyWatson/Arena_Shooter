@@ -1,0 +1,7 @@
+-3 GUI
+-2 arena foreground
+-1 player & explosions
+0 player & wall & bullets
+1 player & explosion sign
+2 arena groud
+3 arena background

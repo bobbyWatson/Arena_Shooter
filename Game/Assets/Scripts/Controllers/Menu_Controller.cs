@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Menu_Controller : MonoBehaviour {
+public class Menu_Controller : Controller {
 
 	private static Menu_Controller _instance;
 	public static Menu_Controller instance{
@@ -31,73 +31,29 @@ public class Menu_Controller : MonoBehaviour {
 		SELECT_CHARACTER,
 		CREDITS,
 		PAUSE,
-		VICTORY
+		VICTORY,
+		GAME,
+		ONLINE_MENU
 	}
 
 	//public MenuPage 
-	public GameObject currentPage;
-	public Pages[] pagesDocKeys;
-	public GameObject[] pagesDicValue;
-	public bool inMenu = true;
-	public float stickTreshold = 0.8f;
-	public float timeBetweenTwoDirections = 0.1f;
-	public Button selectedButton;
+	public UIRefs UI;
+	public Pages currentPage;
 	public Player.Colors[] nextGameColors;
 	public GamepadInput.GamePad.Index[] nextGameInputs;
 	public int selectedPlayersNumber = 0;
-	
-	private bool canDirectionInput;
-	private Dictionary<Pages,GameObject> pagesDic;
+	public string myIp;
 
 	void Awake(){
-		pagesDic = Utils.CreateDictionnary(pagesDocKeys, pagesDicValue);
 		DontDestroyOnLoad(gameObject);
-		canDirectionInput = true;
-	}
-
-
-	void Update(){
-		if(inMenu){
-			if(canDirectionInput){
-				if(GamepadInput.GamePad.GetAxis(GamepadInput.GamePad.Axis.LeftStick, GamepadInput.GamePad.Index.One, false).y <= -stickTreshold || Input.GetAxis("Vertical") <= -stickTreshold){
-					if(selectedButton.linkSelection.ContainsKey(Button.SelectionDirections.DOWN)){
-						selectedButton.Unselect();
-						selectedButton = selectedButton.linkSelection[Button.SelectionDirections.DOWN];
-						selectedButton.Select();
-						StartCoroutine(newDirectionAvalaible());
-					}
-				}
-				else if(GamepadInput.GamePad.GetAxis(GamepadInput.GamePad.Axis.LeftStick, GamepadInput.GamePad.Index.One, false).y >= stickTreshold || Input.GetAxis("Vertical") >= stickTreshold){
-					if(selectedButton.linkSelection.ContainsKey(Button.SelectionDirections.UP)){
-						selectedButton.Unselect();
-						selectedButton = selectedButton.linkSelection[Button.SelectionDirections.UP];
-						selectedButton.Select();
-						StartCoroutine(newDirectionAvalaible());
-					}
-				}
-			}
-			if(GamepadInput.GamePad.GetButtonDown(GamepadInput.GamePad.Button.A, GamepadInput.GamePad.Index.One) || Input.GetKeyDown(KeyCode.Return)){
-				if(selectedButton != null){
-					selectedButton.Validate();
-				}
-			}
-			if(GamepadInput.GamePad.GetButtonDown(GamepadInput.GamePad.Button.B, GamepadInput.GamePad.Index.One) || Input.GetKeyDown(KeyCode.Escape)){
-				if(selectedButton != null){
-					selectedButton.Cancel();
-				}
-			}
-		}
-	}
-	
-	IEnumerator newDirectionAvalaible (){
-		canDirectionInput = false;
-		yield return new WaitForSeconds(timeBetweenTwoDirections);
-		canDirectionInput = true;
 	}
 
 	public void ChangePage(Pages pageName){
-		GameObject.Destroy(currentPage);
-		GameObject.Instantiate(pagesDic[pageName]);
+		if(currentPage != null){
+			UI.menuPages[currentPage].SetActive(false);
+		}
+		currentPage = pageName;
+		UI.menuPages[currentPage].SetActive(true);
 	}
 
 	public void EnterCharacterSelection (){
@@ -112,6 +68,30 @@ public class Menu_Controller : MonoBehaviour {
 	}
 
 	public void StartGame (){
+		ChangePage(Pages.GAME);
 		Game_Controller.instance.StartGame();
+	}
+
+	public void BackToMenu (){
+		Scene_Controller.instance.LoadLevel("Menu");
+	}
+
+	public void EnterOnlineMenu (){
+		if(myIp == null){
+			StartCoroutine(GetMyIP());
+		}else{
+			UI.WaitForOnline.SetActive(false);
+		}
+	}
+
+	IEnumerator GetMyIP (){
+		UI.WaitForOnline.SetActive(true);
+		WWW myExtIPWWW = new WWW("http://checkip.dyndns.org");
+		yield  return myExtIPWWW;
+		myIp = myExtIPWWW.data;
+		myIp = myIp.Substring(myIp.IndexOf(":")+1);
+		myIp = myIp.Substring(0,myIp.IndexOf("<"));
+		UI.WaitForOnline.SetActive(false);
+		yield break;
 	}
 }

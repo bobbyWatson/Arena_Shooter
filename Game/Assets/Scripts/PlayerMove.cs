@@ -47,6 +47,8 @@ public class PlayerMove : MonoBehaviour {
 		shootVec = Vector3.Normalize(shootVec);
 	}
 	private void Move (){
+		if(shootVec == Vector3.zero)
+			shootVec = new Vector3(1,0,shootVec.z);
 		rigidbody2D.velocity = moveVec * speed;
 		Vector3 rotation = Vector3.zero;
 		if((moveVec.x > 0.1 || moveVec.x < -0.1 )&& (moveVec.y > 0.1 || moveVec.y <-0.1)){
