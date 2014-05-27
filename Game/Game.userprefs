@@ -1,15 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\LVO\Unity Project\LVO\Assets\Editable\crewData.json">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Menu\PersoSelect.cs">
     <Files>
-      <File FileName="..\..\..\LVO\Unity Project\LVO\LVO.sln" Line="1" Column="1" />
-      <File FileName="..\..\..\LVO\Unity Project\LVO\Assets\Editable\crewData.json" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player.cs" Line="112" Column="31" />
+      <File FileName="Assets\Scripts\PlayerShoot.cs" Line="42" Column="20" />
+      <File FileName="Assets\Scripts\Bullet.cs" Line="33" Column="24" />
+      <File FileName="Assets\Scripts\Score.cs" Line="36" Column="1" />
       <File FileName="Assets\Scripts\Controllers\Menu_Controller.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Controllers\Game_Controller.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Menu\UIRefs.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\test\Server.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Menu\GetServers.cs" Line="43" Column="2" />
-      <File FileName="Assets\Scripts\Menu\ServerListElem.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Menu\PersoSelect.cs" Line="17" Column="14" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

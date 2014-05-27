@@ -48,6 +48,7 @@ public class Player : MonoBehaviour {
 
 	public void Die (){
 		if(!invincible){
+			Camera.main.GetComponent<ScreenShake>().Shake(0.3f, 0.3f, 0.05f);
 			explosion.Play();
 			audioSource.clip = explodeSound;
 			audioSource.Play();
